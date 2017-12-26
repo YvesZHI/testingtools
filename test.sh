@@ -1,18 +1,15 @@
 #!/bin/bash
 
-a=$(ps aux | grep $2 | awk '{print $2}')
-
-
-a=${a%[[:space:]]*}
+a=$(pgrep -f $2)
 
 if [[ $1 == "top" ]];then
-	a=$(echo $a | sed -e 's/ / -p /g')
-	a=" -p ${a}"
+	total=$(echo $a | tr -cd ' ' | wc -c)
+	echo "total processes: "$total
 	echo $a
-	top $a
+	top
 elif [[ $1 == "netstat" ]];then
 	a=$(echo $a | sed -e 's/ /\\|/g')
 	a="'${a}'"
-	echo $a
-	netstat -p | grep $a
+	name=`hostname`
+	netstat -p | grep $a | awk -v n=$name '{if ($5 !~ "localhost" && $5 !~ n) {print $5;}}'
 fi
