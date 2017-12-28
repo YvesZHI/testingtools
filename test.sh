@@ -1,7 +1,9 @@
 #!/bin/bash
 
+
+
 if [[ $1 == "-h" || $1 == "--help" ]]; then
-	printf "usage: ./test.sh [COMMAND] [PARAMETER]...\n"
+	printf "usage: ./test.sh [COMMAND] [ARGS]...\n"
 	printf "This script integrates common system monitor commands.\n\n"
 	printf "	top		top [TARGET] displays the information of the command top\n"
 	printf "			including the number of processes whose names contain [TARGET]\n"
@@ -12,10 +14,12 @@ if [[ $1 == "-h" || $1 == "--help" ]]; then
 	printf "			of processes whose names contain [TARGET]\n"
 	printf "	vmstat		vmstat --help\n"
 	printf "	sar		sar --help\n"
-	printf "	perf		perf [EXE] [OPTIONS_OF_EXE]... displays the number of cache-misses\n"
+	printf "	perf		perf [EXE] [ARGS_OF_EXE]... displays the number of cache-misses\n"
 	printf "								the number of instructions\n"
 	printf "								the number of cycles\n"
 	printf "			of [EXE]\n"
+	printf "	flamegraph	flamegraph [DURATION] generates the flamegraph file recorded the\n"
+	printf "			perf data during [DURATION]\n"
 	exit 0
 fi
 
@@ -40,8 +44,12 @@ elif [[ $1 == "perf" ]];then
 	perf stat -e cache-misses,instructions,cycles ${@:2}
 elif [[ $1 == "flamegraph" ]];then
 	perf record -a -g -- sleep $2
-	perf script | /root/flamegraph/stackcollapse-perf.pl | /root/flamegraph/flamegraph.pl > res.svg
+	NAME="flamegraph"
+	i=$(ls | grep "$NAME[0-9]*\.svg" | wc -l)
+	name=$NAME$i.svg
+	perf script | /root/flamegraph/stackcollapse-perf.pl | /root/flamegraph/flamegraph.pl > $name
 	rm perf.data
+	echo "$name generated"
 else
 	echo "command $1 not support"
 	echo 'contact:'
