@@ -47,7 +47,7 @@ elif [[ $1 == "flamegraph" ]];then
 	NAME="flamegraph"
 	i=$(ls | grep "$NAME[0-9]*\.svg" | wc -l)
 	name=$NAME$i.svg
-	perf script | /root/flamegraph/stackcollapse-perf.pl | /root/flamegraph/flamegraph.pl > $name
+	perf script | ./flamegraph/stackcollapse-perf.pl | ./flamegraph/flamegraph.pl > $name
 	rm perf.data
 	echo "$name generated"
 else
