@@ -59,6 +59,12 @@ elif [[ $1 == "flamegraph" ]];then
 	rm perf.data
 	echo "$name generated"
 elif [[ $1 == "dfx" ]];then
+	if [ ! -f /proc/HI1616_DFX ];then
+		cd ./hi1616dfx
+		make clean
+		make
+		insmod dfx.ko
+	fi
 	echo "$2 $3" > /proc/HI1616_DFX
 	echo "Go to /home in $3 second(s) to get the result."
 	(
