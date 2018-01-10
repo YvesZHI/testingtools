@@ -20,6 +20,14 @@ if [[ $1 == "-h" || $1 == "--help" ]]; then
 	printf "			of [EXE]\n"
 	printf "	flamegraph	flamegraph [DURATION] generates the flamegraph file recorded the\n"
 	printf "			perf data during [DURATION]\n"
+	printf "	dfx		dfx [TYPE] [DURATION] generates the dfx results in the direcoty /home\n"
+	printf "		       TYPE	description\n"
+	printf "			1	DDR and LLC\n"
+	printf "			2	HHA and SLLC\n"
+	printf "			3	AA read\n"
+	printf "			4	AA write\n"
+	printf "			5	AA copyback\n"
+	printf "			6	PA and HLLC\n"
 	exit 0
 fi
 
@@ -50,6 +58,47 @@ elif [[ $1 == "flamegraph" ]];then
 	perf script | ./flamegraph/stackcollapse-perf.pl | ./flamegraph/flamegraph.pl > $name
 	rm perf.data
 	echo "$name generated"
+elif [[ $1 == "dfx" ]];then
+	echo "$2 $3" > /proc/HI1616_DFX
+	echo "Go to /home in $3 second(s) to get the result."
+	(
+		cd /home
+		if [[ $2 == "1" ]];then
+			while [ ! -f /home/llc_ddr_statistic ];do
+				sleep 1
+			done
+			python /root/testingtools/hi1616dfx/parse.py -c llc -t $3 -o llc > /dev/null
+		elif [[ $2 == "2" ]];then
+			while [ ! -f /home/hha_sllc_statistic ];do
+				sleep 1
+			done
+			python /root/testingtools/hi1616dfx/parse.py -c hha -t $3 -o hha > /dev/null
+			python /root/testingtools/hi1616dfx/parse.py -c sllc -t $3 -o sllc > /dev/null
+		elif [[ $2 == "3" ]];then
+			while [ ! -f /home/aa_rd_statistic ];do
+				sleep 1
+			done
+			python /root/testingtools/hi1616dfx/parse.py -c aa_rd -t $3 -o aa_rd > /dev/null
+		elif [[ $2 == "4" ]];then
+			while [ ! -f /home/aa_wr_statistic ];do
+				sleep 1
+			done
+			python /root/testingtools/hi1616dfx/parse.py -c aa_wr -t $3 -o aa_wr > /dev/null
+		elif [[ $2 == "5" ]];then
+			while [ ! -f /home/aa_cb_statistic ];do
+				sleep 1
+			done
+			python /root/testingtools/hi1616dfx/parse.py -c aa_cb -t $3 -o aa_cb > /dev/null
+		elif [[ $2 == "6" ]];then
+			while [ ! -f /home/pa_statistic ];do
+				sleep 1
+			done
+			python /root/testingtools/hi1616dfx/parse.py -c pa -t $3 -o pa > /dev/null
+			python /root/testingtools/hi1616dfx/parse.py -c hllc -t $3 -o hllc > /dev/null
+		else
+			echo "illegal parameters"
+		fi
+	) &
 else
 	echo "command $1 not support"
 	echo 'contact:'
