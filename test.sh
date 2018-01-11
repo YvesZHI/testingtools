@@ -20,6 +20,7 @@ if [[ $1 == "-h" || $1 == "--help" ]]; then
 	printf "			of [EXE]\n"
 	printf "	flamegraph	flamegraph [DURATION] generates the flamegraph file recorded the\n"
 	printf "			perf data during [DURATION]\n"
+	printf "	stream		stream generated a file in the directory /home about memory transfer rates in MB/s\n"
 	printf "	dfx		ONLY FOR ARM!\n"
 	printf "			dfx [TYPE] [DURATION] generates the dfx results in the direcoty /home\n"
 	printf "		        TYPE	description\n"
@@ -70,6 +71,7 @@ elif [[ $1 == "dfx" && $(uname -p) =~ "arch" ]];then
 		make clean
 		make
 		insmod dfx.ko
+		make clean
 	fi
 	echo "$2 $3" > /proc/HI1616_DFX
 	echo "Go to /home in $3 second(s) to get the result."
