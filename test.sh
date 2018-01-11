@@ -22,7 +22,7 @@ if [[ $1 == "-h" || $1 == "--help" ]]; then
 	printf "			perf data during [DURATION]\n"
 	printf "	dfx		ONLY FOR ARM!\n"
 	printf "			dfx [TYPE] [DURATION] generates the dfx results in the direcoty /home\n"
-	printf "		       TYPE	description\n"
+	printf "		        TYPE	description\n"
 	printf "			1	DDR and LLC\n"
 	printf "			2	HHA and SLLC\n"
 	printf "			3	AA read\n"
