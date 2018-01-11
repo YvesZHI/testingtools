@@ -59,6 +59,11 @@ elif [[ $1 == "flamegraph" ]];then
 	perf script | ./flamegraph/stackcollapse-perf.pl | ./flamegraph/flamegraph.pl > $name
 	rm perf.data
 	echo "$name generated"
+elif [[ $1 == "stream" ]];then
+	if [ ! -f stream ];then
+		gcc -O stream.c -o stream
+	fi
+	./stream > /home/stream
 elif [[ $1 == "dfx" && $(uname -p) =~ "arch" ]];then
 	if [ ! -f /proc/HI1616_DFX ];then
 		cd ./hi1616dfx
