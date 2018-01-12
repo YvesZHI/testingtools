@@ -1,2 +1,2 @@
-doc -export-ignore
-scripts -export-ignore
+doc/ export-ignore
+scripts/ export-ignore
