@@ -21,7 +21,7 @@ if [[ $1 == "-h" || $1 == "--help" ]]; then
 	printf "	flamegraph	flamegraph [DURATION] generates the flamegraph file recorded the\n"
 	printf "			perf data during [DURATION]\n"
 	printf "	stream		stream generated a file in the directory /home about memory transfer rates in MB/s\n"
-	printf "	lat_ctx		lat_ctx [SIZE_IN_BYTES] [NUM_OF_PROCS] generates the context switching time in the directory /home\n"
+	printf "	lat_ctx		lat_ctx [SIZE_IN_BYTES] [NUM_OF_PROCS] generates the context switching time\n"
 	printf "	dfx		ONLY FOR ARM!\n"
 	printf "			dfx [TYPE] [DURATION] generates the dfx results in the direcoty /home\n"
 	printf "		        TYPE	description\n"
@@ -62,12 +62,22 @@ elif [[ $1 == "flamegraph" ]];then
 	rm perf.data
 	echo "$name generated"
 elif [[ $1 == "stream" ]];then
+	if [ ! -d "lmbench3" ]; then
+		wget http://www.bitmover.com/lmbench/lmbench3.tar.gz
+		tar xzf lmbench3.tar.gz
+		rm lmbench3.tar.gz
+	fi
 	cd lmbench3
 	if [ ! -f ./bin/stream ];then
 		make > /dev/null 2>&1
 	fi
 	./bin/stream > /home/stream 2>&1
 elif [[ $1 == "lat_ctx" ]];then
+	if [ ! -d "lmbench3" ]; then
+		wget http://www.bitmover.com/lmbench/lmbench3.tar.gz
+		tar xzf lmbench3.tar.gz
+		rm lmbench3.tar.gz
+	fi
 	cd lmbench3
 	if [ ! -f ./bin/lat_ctx ];then
 		make > /dev/null 2>&1
