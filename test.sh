@@ -61,6 +61,8 @@ elif [[ $1 == "flamegraph" ]];then
 	perf script | ./flamegraph/stackcollapse-perf.pl | ./flamegraph/flamegraph.pl > $name
 	rm perf.data
 	echo "$name generated"
+elif [[ $1 == "ps" ]];then
+	ps -Lo psr,pid,tid,etime,cputime,comm $(pgrep $2)
 elif [[ $1 == "stream" ]];then
 	if [ ! -d "lmbench3" ]; then
 		wget http://www.bitmover.com/lmbench/lmbench3.tar.gz
