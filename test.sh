@@ -20,6 +20,7 @@ if [[ $1 == "-h" || $1 == "--help" ]]; then
 	printf "			of [EXE]\n"
 	printf "	flamegraph	flamegraph [DURATION] generates the flamegraph file recorded the\n"
 	printf "			perf data during [DURATION]\n"
+	printf "	ps		ps [TARGET] list the process info about the target\n"
 	printf "	stream		stream generated a file in the directory /home about memory transfer rates in MB/s\n"
 	printf "	lat_ctx		lat_ctx [SIZE_IN_BYTES] [NUM_OF_PROCS] generates the context switching time\n"
 	printf "	dfx		ONLY FOR ARM!\n"
