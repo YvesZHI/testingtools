@@ -1,5 +1,18 @@
 #!/bin/bash
 
+LM_PATH=""
+archi=$(dpkg --print-architecture)
+if [[ "$archi" =~ "amd" ]]; then
+	LM_PATH="./bin/*/"
+else
+	LM_PATH="./bin/"
+fi
+
+function get_lmbench3 {
+	wget http://www.bitmover.com/lmbench/lmbench3.tar.gz
+	tar xzf lmbench3.tar.gz
+	rm lmbench3.tar.gz
+}
 
 
 if [[ $1 == "-h" || $1 == "--help" ]]; then
@@ -66,26 +79,22 @@ elif [[ $1 == "ps" ]];then
 	ps -Lo psr,pid,tid,etime,cputime,comm $(pgrep $2)
 elif [[ $1 == "stream" ]];then
 	if [ ! -d "lmbench3" ]; then
-		wget http://www.bitmover.com/lmbench/lmbench3.tar.gz
-		tar xzf lmbench3.tar.gz
-		rm lmbench3.tar.gz
+		get_lmbench3
 	fi
 	cd lmbench3
 	if [ ! -f ./bin/stream ];then
 		make > /dev/null 2>&1
 	fi
-	./bin/stream > /home/stream 2>&1
+	$LM_PATH/stream > /home/stream 2>&1
 elif [[ $1 == "lat_ctx" ]];then
 	if [ ! -d "lmbench3" ]; then
-		wget http://www.bitmover.com/lmbench/lmbench3.tar.gz
-		tar xzf lmbench3.tar.gz
-		rm lmbench3.tar.gz
+		get_lmbench3
 	fi
 	cd lmbench3
 	if [ ! -f ./bin/lat_ctx ];then
 		make > /dev/null 2>&1
 	fi
-	./bin/lat_ctx -s $2 processes $3 > "/home/lat_ctx_$2_$3" 2>&1
+	$LM_PATH/lat_ctx -s $2 processes $3 > "/home/lat_ctx_$2_$3" 2>&1
 elif [[ $1 == "dfx" && $(uname -p) =~ "arch" ]];then
 	if [ ! -f /proc/HI1616_DFX ];then
 		cd ./hi1616dfx
