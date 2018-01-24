@@ -64,8 +64,18 @@ elif [[ $1 == "netstat" ]];then
 elif [[ $1 == "vmstat" ]];then
 	vmstat $2 $3
 elif [[ $1 == "sar" ]];then
+	existed=$(which sar)
+	if [[ $existed == "" ]]; then
+		apt update
+		apt install sysstat
+	fi
 	sar -B $2 $3
 elif [[ $1 == "perf" ]];then
+	existed=$(which perf)
+	if [[ $existed == "" ]]; then
+		apt update
+		apt install linux-tools-common linux-tools-$(uname -r)
+	fi
 	perf stat -e cache-misses,instructions,cycles ${@:2}
 elif [[ $1 == "flamegraph" ]];then
 	perf record -a -g -- sleep $2
