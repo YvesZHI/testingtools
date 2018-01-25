@@ -5,7 +5,7 @@ archi=$(dpkg --print-architecture)
 if [[ "$archi" =~ "amd" ]]; then
 	LM_PATH="./bin/*/"
 else
-	LM_PATH="./bin/"
+	LM_PATH="./bin"
 fi
 
 function get_lmbench3 {
