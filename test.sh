@@ -76,7 +76,7 @@ elif [[ $1 == "perf" ]];then
 		apt update
 		apt install linux-tools-common linux-tools-$(uname -r)
 	fi
-	perf stat -e cache-misses,instructions,cycles ${@:2}
+	perf stat -e cache-misses,instructions,cycles,context-switches ${@:2}
 elif [[ $1 == "flamegraph" ]];then
 	perf record -a -g -- sleep $2
 	NAME="flamegraph"
