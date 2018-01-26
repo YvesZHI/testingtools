@@ -61,6 +61,12 @@ elif [[ $1 == "netstat" ]];then
 	a="'${a}'"
 	name=`hostname`
 	netstat -p | grep $a | awk -v n=$name 'BEGIN {numExter=0; numSocket=0; numIPC=0;} { if ($5 ~ "localhost" || $5 ~ n){ numIPC++; } else if ($5 ~ "STREAM"){ numSocket++; } else {numExter++;} } END {print "Internet: ", numExter, "\tIPC: ", numIPC, "\tUnix domain socket: ", numSocket}'
+	existed=$(which nload)
+	if [[ $existed == "" ]]; then
+		apt update
+		apt install nload
+	fi
+	nload $(grep inet /etc/network/interfaces | grep -v lo)
 elif [[ $1 == "vmstat" ]];then
 	vmstat $2 $3
 elif [[ $1 == "sar" ]];then
